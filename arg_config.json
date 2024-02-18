@@ -1,0 +1,85 @@
+{
+  "task_id": {
+    "required": true
+  },
+  "subdir": {
+    "required": true
+  },
+  "audio_url": {
+    "sys_name": "driven_audio",
+    "required": true,
+    "need_change_url": true,
+    "default_ext": "wav"
+  },
+  "image_url": {
+    "sys_name": "source_image",
+    "required": true,
+    "need_change_url": true,
+    "default_ext": "jpg"
+  },
+  "ref_eyeblink": {
+    "need_change_url": true,
+    "default_ext": "mp4"
+  },
+  "ref_pose": {
+    "need_change_url": true,
+    "default_ext": "mp4"
+  },
+  "checkpoint_dir": "./checkpoints",
+  "result_dir": "./results",
+  "pose_style": {
+    "default": 0,
+    "range_int": "[0, 45]"
+  },
+  "batch_size": {
+    "default": 2,
+    "range_int": "[2, 10]"
+  },
+  "size": {
+    "default": 256,
+    "choices": [
+      256,
+      512
+    ]
+  },
+  "expression_scale": {
+    "default": 1.0,
+    "range_float": "[1, 3]"
+  },
+  "input_yaw": null,
+  "input_pitch": null,
+  "input_roll": null,
+  "enhancer": {
+    "default": null,
+    "bool2str": "gfpgan"
+  },
+  "background_enhancer": {
+    "default": null,
+    "bool2str": "realesrgan"
+  },
+  "cpu": false,
+  "face3dvis": false,
+  "still": false,
+  "preprocess": {
+    "default": "crop",
+    "choices": [
+      "crop",
+      "extcrop",
+      "resize",
+      "full",
+      "extfull"
+    ]
+  },
+  "verbose": false,
+  "old_version": false,
+  "net_recon": "resnet50",
+  "init_path": null,
+  "use_last_fc": false,
+  "bfm_folder": "./checkpoints/BFM_Fitting/",
+  "bfm_model": "BFM_model_front.mat",
+  "focal": 1015.0,
+  "center": 112.0,
+  "camera_d": 10.0,
+  "z_near": 5.0,
+  "z_far": 15.0
+}

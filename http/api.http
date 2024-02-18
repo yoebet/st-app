@@ -1,0 +1,60 @@
+
+### root
+GET {{base}}/
+Accept: application/json
+
+
+### check_mem_all
+
+GET {{base}}/check_mem_all/available?unit=G
+Content-Type: application/json
+Accept: application/json
+Authorization: {{auth}}
+
+
+### check_mem
+
+GET {{base}}/check_mem/0?unit=G
+Content-Type: application/json
+Accept: application/json
+Authorization: {{auth}}
+
+
+
+### launch - cuda
+
+POST {{base}}/launch
+Content-Type: application/json
+Accept: application/json
+Authorization: {{auth}}
+
+{
+  "task": {
+    "task_id": "ag2sf",
+    "subdir": "test1",
+    "image_url":"http://127.0.0.1:5000/source_image/art_0.png",
+    "audio_url":"http://127.0.0.1:5000/driven_audio/bus_chinese.wav",
+    "preprocess":"full",
+    "still":"0",
+    "enhancer":"gfpgan",
+    "ref_eyeblink":"http://127.0.0.1:5000/ref_video/WDA_KatieHill_000.mp4"
+  },
+  "launch": {
+    "device_index": 0
+  }
+}
+
+
+
+### task - status
+
+POST {{base}}/task/ss/status
+Content-Type: application/json
+Accept: application/json
+Authorization: {{auth}}
+
+{
+  "root_pid": "9417199",
+  "sub_dir": "test1"
+}
+
