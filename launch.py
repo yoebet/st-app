@@ -17,10 +17,8 @@ from urllib.parse import urlparse
 import psutil
 import pathlib
 import logging
-import hashlib
 
-from configs.default import get_cfg_defaults
-from talking_head.params import Task, LaunchOptions, TaskParams
+from talking_head.params import  Params
 from talking_head.dirs import get_task_dir
 from sadtalker import inference
 
@@ -68,7 +66,7 @@ def build_params(args, config='./arg_config.json'):
                     setattr(args, key, False)
     return args
 
-def launch(config, task: Task, launch_options: LaunchOptions, logger=None):
+def launch(config, task: Params, launch_options: Params, logger=None):
     if logger is None:
         logger = logging.getLogger('launch')
 
@@ -76,7 +74,7 @@ def launch(config, task: Task, launch_options: LaunchOptions, logger=None):
 
     # logger.info(pformat(task))
     # logger.info(pformat(launch_options))
-    params = TaskParams(**dataclasses.asdict(task), **dataclasses.asdict(launch_options))
+    params = task.merge(launch_options)
     if launch_options.device_index is not None:
         params.device = f'cuda:{launch_options.device_index}'
     else:
@@ -108,7 +106,6 @@ def launch(config, task: Task, launch_options: LaunchOptions, logger=None):
     # model_cfg.CF_GUIDANCE.SCALE = params.cfg_scale
     # model_cfg.freeze()
 
-    json.dump(dataclasses.asdict(params), open(f'{task_dir}/params.json', 'w'), indent=2)
 
     result_file = os.path.join(task_dir, 'result.json')
     if os.path.exists(result_file):
@@ -118,16 +115,18 @@ def launch(config, task: Task, launch_options: LaunchOptions, logger=None):
         'prepare_start_at': prepare_start_at,
         'inference_start_at': datetime.now().isoformat()
     }
-    try:
-        inference(params)
-        result['success'] = True
-        result['cropped_image_path'] = params.cropped_image_path
-        result['output_video_path'] = params.output_video_path
+    # try:
+    params = build_params(params)
+    json.dump(vars(params), open(f'{task_dir}/params.json', 'w'), indent=2)
+    inference(params)
+    result['success'] = True
+        # result['cropped_image_path'] = params.cropped_image_path
+        # result['output_video_path'] = params.output_video_path
         # upload ...
-    except Exception as e:
-        logger.error(e)
-        result['success'] = False
-        result['error_message'] = str(e)
+    # except Exception as e:
+    #     logger.error(e)
+    #     result['success'] = False
+    #     result['error_message'] = str(e)
     result['finish_at'] = datetime.now().isoformat()
 
     json.dump(result, open(result_file, 'w'), indent=2)

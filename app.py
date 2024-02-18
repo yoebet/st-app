@@ -5,9 +5,9 @@ import base64
 import shutil
 import json
 import torch
-from flask import Flask, jsonify, request, Response, abort, send_file
+from flask import Flask, jsonify, request, Response, abort, send_file, send_from_directory
 from dotenv import dotenv_values
-from talking_head.params import Task, LaunchOptions
+from talking_head.params import Params
 from talking_head.dirs import get_task_dir
 from launch import launch
 
@@ -15,7 +15,7 @@ app = Flask(__name__)
 
 app.config.from_mapping(dotenv_values())
 app.config.from_mapping(dotenv_values('.env.local'))
-app.config['AUTHORIZATION']='999'
+
 logger = app.logger
 
 
@@ -35,7 +35,7 @@ def before_request_callback():
 
 @app.route('/<path:filename>')
 def serve_file(filename):
-    root_dir = './examples/driven_audio'
+    root_dir = './examples'
     return send_from_directory(root_dir, filename)
 
 def trans_unit(bytes, unit):
@@ -75,8 +75,8 @@ def launch_task():
     launch_params = req.get('launch')
     if launch_params is None:
         launch_params = {}
-    task = Task(**task_params)
-    launch_options = LaunchOptions(**launch_params)
+    task = Params(task_params)
+    launch_options = Params(launch_params)
 
     device_index = launch_options.device_index
     if device_index is not None:
