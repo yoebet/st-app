@@ -113,18 +113,18 @@ def launch(config, task: Params, launch_options: Params, logger=None):
         'prepare_start_at': prepare_start_at,
         'inference_start_at': datetime.now().isoformat()
     }
-    # try:
-    params = build_params(params)
-    json.dump(vars(params), open(f'{task_dir}/params.json', 'w'), indent=2)
-    inference(params)
-    result['success'] = True
-        # result['cropped_image_path'] = params.cropped_image_path
-        # result['output_video_path'] = params.output_video_path
+    try:
+        params = build_params(params)
+        json.dump(vars(params), open(f'{task_dir}/params.json', 'w'), indent=2)
+        inference(params)
+        result['success'] = True
+        result['cropped_image_path'] = params.cropped_image_path
+        result['output_video_path'] = params.output_video_path
         # upload ...
-    # except Exception as e:
-    #     logger.error(e)
-    #     result['success'] = False
-    #     result['error_message'] = str(e)
+    except Exception as e:
+        logger.error(e)
+        result['success'] = False
+        result['error_message'] = str(e)
     result['finish_at'] = datetime.now().isoformat()
 
     json.dump(result, open(result_file, 'w'), indent=2)

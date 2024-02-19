@@ -18,10 +18,9 @@ from talking_head.params import Params
 
 def inference(args):
     # torch.backends.cudnn.enabled = False
-    print(args.source_image,'===========================')
     pic_path = args.source_image
     audio_path = args.driven_audio
-    save_dir = os.path.join(args.result_dir, strftime("%Y_%m_%d_%H.%M.%S"))
+    save_dir = os.path.join(args.task_dir, strftime("%Y_%m_%d_%H.%M.%S"))
     os.makedirs(save_dir, exist_ok=True)
     pose_style = args.pose_style
     device = args.device
@@ -42,7 +41,7 @@ def inference(args):
     audio_to_coeff = Audio2Coeff(sadtalker_paths, device)
 
     animate_from_coeff = AnimateFromCoeff(sadtalker_paths, device)
-    print(args.source_image, 'ddddddddddddddddddd')
+
     # crop image and extract 3dmm from image
     first_frame_dir = os.path.join(save_dir, 'first_frame_dir')
     os.makedirs(first_frame_dir, exist_ok=True)
@@ -90,25 +89,15 @@ def inference(args):
 
     result = animate_from_coeff.generate(data, save_dir, pic_path, crop_info, \
                                          enhancer=args.enhancer, background_enhancer=args.background_enhancer, preprocess=args.preprocess, img_size=args.size)
-
-    shutil.move(result, save_dir + '.mp4')
-    print('The generated video is named:', save_dir + '.mp4')
+    setattr(args, 'cropped_image_path',args.task_dir + f'/crop_pic{os.path.splitext(crop_pic_path)[1]}' )
+    setattr(args, 'output_video_path', args.task_dir + '/output.mp4')
+    shutil.move(result, args.output_video_path)
+    shutil.move(crop_pic_path, args.cropped_image_path)
+    print('The generated video is named:', args.output_video_path)
 
     if not args.verbose:
         shutil.rmtree(save_dir)
 
-
-    del preprocess_model
-    del audio_to_coeff
-    del animate_from_coeff
-
-    if torch.cuda.is_available():
-        torch.cuda.empty_cache()
-        torch.cuda.synchronize()
-
-    import gc;
-
-    gc.collect()
 # with open(r'./tasks/test1/t_ag2sf/params.json', 'r') as file:
 #     config_dict = json.load(file)
 # ps=Params(config_dict)
