@@ -46,8 +46,6 @@ def build_params(args, config='./arg_config.json'):
     with open(config, 'r') as file:
         config_dict = json.load(file)
     for key, value in config_dict.items():
-        if key=='preprocess':
-            print(key,args.preprocess)
         if not hasattr(args, key):
             if not isinstance(value, dict):
                 setattr(args, key, value)
@@ -75,7 +73,7 @@ def launch(config, task: Params, launch_options: Params, logger=None):
     # logger.info(pformat(task))
     # logger.info(pformat(launch_options))
     params = task.merge(launch_options)
-    if launch_options.device_index is not None:
+    if hasattr(launch_options, 'device_index'):
         params.device = f'cuda:{launch_options.device_index}'
     else:
         logger.warning('device_index not set')

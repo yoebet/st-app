@@ -18,7 +18,7 @@ from talking_head.params import Params
 
 def inference(args):
     # torch.backends.cudnn.enabled = False
-
+    print(args.source_image,'===========================')
     pic_path = args.source_image
     audio_path = args.driven_audio
     save_dir = os.path.join(args.result_dir, strftime("%Y_%m_%d_%H.%M.%S"))
@@ -42,7 +42,7 @@ def inference(args):
     audio_to_coeff = Audio2Coeff(sadtalker_paths, device)
 
     animate_from_coeff = AnimateFromCoeff(sadtalker_paths, device)
-
+    print(args.source_image, 'ddddddddddddddddddd')
     # crop image and extract 3dmm from image
     first_frame_dir = os.path.join(save_dir, 'first_frame_dir')
     os.makedirs(first_frame_dir, exist_ok=True)

@@ -78,9 +78,8 @@ def launch_task():
     task = Params(task_params)
     launch_options = Params(launch_params)
 
-    device_index = launch_options.device_index
-    if device_index is not None:
-        free, total = torch.cuda.mem_get_info(device_index)
+    if hasattr(launch_options, 'device_index'):
+        free, total = torch.cuda.mem_get_info(launch_options.device_index)
         k = 1024
         if free < 10 * k * k * k:
             return (jsonify({
