@@ -2,7 +2,7 @@
   "task_id": {
     "required": true
   },
-  "subdir": {
+  "sub_dir": {
     "required": true
   },
   "audio_url": {
@@ -72,6 +72,7 @@
       "extfull"
     ]
   },
+  "run_mode": "sync",
   "verbose": false,
   "old_version": false,
   "net_recon": "resnet50",

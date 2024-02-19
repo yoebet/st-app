@@ -3,6 +3,7 @@ import re
 from pprint import pformat
 import base64
 import shutil
+from io import BytesIO
 import json
 import torch
 from flask import Flask, jsonify, request, Response, abort, send_file, send_from_directory
@@ -30,8 +31,8 @@ def before_request_callback():
     if path != '/':
         auth = request.headers.get('AUTHORIZATION')
         if not auth == app.config['AUTHORIZATION']:
-            pass
-            # abort(400)
+            return
+            abort(400)
 
 @app.route('/<path:filename>')
 def serve_file(filename):
@@ -78,15 +79,6 @@ def launch_task():
     task = Params(task_params)
     launch_options = Params(launch_params)
 
-    if hasattr(launch_options, 'device_index'):
-        free, total = torch.cuda.mem_get_info(launch_options.device_index)
-        k = 1024
-        if free < 10 * k * k * k:
-            return (jsonify({
-                'success': False,
-                'error_message': 'device occupied',
-            }))
-
     try:
         launch_result = launch(app.config, task, launch_options, logger=logger)
     except Exception as e:
@@ -120,7 +112,7 @@ def check_task_status(task_id):
             return jsonify({
                 'success': True,
                 'task_status': 'failed',
-                'failure_reason': 'wpn'
+                'error_message': 'wpn'
             })
         try:
             rp.cmdline()
@@ -162,21 +154,56 @@ def check_task_status(task_id):
                 })
             else:
                 return jsonify({
-                    'success': False,
+                    'success': True,
                     'task_status': 'failed',
-                    'failure_reason': launch_result['error_message']
+                    'error_message': launch_result['error_message']
                 })
         else:
+            if pid is None:
+                return jsonify({
+                    'success': True,
+                    'task_status': 'running',
+                })
             return jsonify({
                 'success': True,
                 'task_status': 'failed',
-                'failure_reason': 'ntest'
+                'error_message': 'ntest'
             })
     else:
         return jsonify({
             'success': False,
             'error_message': 'no such task'
         })
+
+
+@app.route('/task/<task_id>/<sub_dir>/result', methods=('GET',))
+def get_result_info(task_id, sub_dir):
+    TASKS_DIR = app.config['TASKS_DIR']
+    task_dir = get_task_dir(TASKS_DIR, task_id, sub_dir)
+
+    result_file = os.path.join(task_dir, 'result.json')
+    if not os.path.exists(result_file):
+        return jsonify({
+            'success': False,
+            'error_message': 'no result file'
+        })
+
+    return send_file(result_file, mimetype='application/json', as_attachment=False)
+
+
+@app.route('/task/<task_id>/<sub_dir>/result_file/<filename>', methods=('GET',))
+def get_result_file(task_id, sub_dir, filename: str):
+    TASKS_DIR = app.config['TASKS_DIR']
+    task_dir = get_task_dir(TASKS_DIR, task_id, sub_dir)
+
+    if filename.startswith('/') or '..' in filename:
+        abort(404)
+
+    path = os.path.join(task_dir, filename)
+    if not os.path.exists(path):
+        abort(404)
+
+    return send_file(path)
 
 
 def get():
