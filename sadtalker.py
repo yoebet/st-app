@@ -13,6 +13,8 @@ from src.generate_facerender_batch import get_facerender_data
 from src.utils.init_path import init_path
 import json
 
+from talking_head.params import Params
+
 
 def inference(args):
     # torch.backends.cudnn.enabled = False
@@ -95,3 +97,19 @@ def inference(args):
     if not args.verbose:
         shutil.rmtree(save_dir)
 
+
+    del preprocess_model
+    del audio_to_coeff
+    del animate_from_coeff
+
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+        torch.cuda.synchronize()
+
+    import gc;
+
+    gc.collect()
+# with open(r'./tasks/test1/t_ag2sf/params.json', 'r') as file:
+#     config_dict = json.load(file)
+# ps=Params(config_dict)
+# inference(ps)

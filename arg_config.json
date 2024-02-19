@@ -18,10 +18,12 @@
     "default_ext": "jpg"
   },
   "ref_eyeblink": {
+    "default": null,
     "need_change_url": true,
     "default_ext": "mp4"
   },
   "ref_pose": {
+    "default": null,
     "need_change_url": true,
     "default_ext": "mp4"
   },
