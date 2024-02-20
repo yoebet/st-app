@@ -128,7 +128,7 @@ def build_params(args, config='./arg_config.json'):
             elif 'default' in value:
                 setattr(args, key, value['default'])
         elif isinstance(value, dict) and 'need_change_url' in value:
-            local_url = download(getattr(args,key), args.task_dir, None,value['default_ext'])
+            local_url = download(getattr(args,key), args.task_dir, value['default_file_name'] if 'default_file_name' in value else None,value['default_ext'])
             setattr(args, key, local_url)
             if 'sys_name' in value:
                 setattr(args, value['sys_name'], local_url)

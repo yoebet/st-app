@@ -20,7 +20,7 @@ def inference(args):
     # torch.backends.cudnn.enabled = False
     pic_path = args.source_image
     audio_path = args.driven_audio
-    save_dir = os.path.join(args.task_dir, strftime("%Y_%m_%d_%H.%M.%S"))
+    save_dir = os.path.join(args.task_dir, 'tmp')
     os.makedirs(save_dir, exist_ok=True)
     pose_style = args.pose_style
     device = args.device
@@ -89,7 +89,7 @@ def inference(args):
 
     result = animate_from_coeff.generate(data, save_dir, pic_path, crop_info, \
                                          enhancer=args.enhancer, background_enhancer=args.background_enhancer, preprocess=args.preprocess, img_size=args.size)
-    setattr(args, 'cropped_image_path',args.task_dir + f'/crop_pic{os.path.splitext(crop_pic_path)[1]}' )
+    setattr(args, 'cropped_image_path',args.task_dir + f'/input-image-cropped{os.path.splitext(crop_pic_path)[1]}' )
     setattr(args, 'output_video_path', args.task_dir + '/output.mp4')
     shutil.move(result, args.output_video_path)
     shutil.move(crop_pic_path, args.cropped_image_path)
