@@ -22,8 +22,8 @@ from PIL import Image
 import numpy as np
 
 from sadtalker import inference
-from talking_head.params import Params
-from talking_head.dirs import get_task_dir, get_tf_logging_dir
+from utils.params import Params
+from utils.dirs import get_task_dir, get_tf_logging_dir
 
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",

@@ -8,8 +8,8 @@ import json
 import torch
 from flask import Flask, jsonify, request, Response, abort, send_file, send_from_directory
 from dotenv import dotenv_values
-from talking_head.params import Params
-from talking_head.dirs import get_task_dir
+from utils.params import Params
+from utils.dirs import get_task_dir
 from launch import launch
 
 app = Flask(__name__)

@@ -13,7 +13,7 @@ from src.generate_facerender_batch import get_facerender_data
 from src.utils.init_path import init_path
 import json
 
-from talking_head.params import Params
+from utils.params import Params
 
 
 def inference(args):
