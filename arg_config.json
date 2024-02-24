@@ -13,6 +13,7 @@
   },
   "image_url": {
     "sys_name": "source_image",
+    "default_file_name": "input_image",
     "required": true,
     "need_change_url": true,
     "default_ext": "jpg"
@@ -20,11 +21,13 @@
   "ref_eyeblink": {
     "default": null,
     "need_change_url": true,
+    "default_file_name": "ref_eyeblink_video",
     "default_ext": "mp4"
   },
   "ref_pose": {
     "default": null,
     "need_change_url": true,
+    "default_file_name": "ref_pose_video",
     "default_ext": "mp4"
   },
   "checkpoint_dir": "./checkpoints",
