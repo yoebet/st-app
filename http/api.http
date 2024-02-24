@@ -32,12 +32,15 @@ Authorization: {{auth}}
   "task": {
     "task_id": "ag2sf",
     "sub_dir": "test1",
-    "image_url":"http://127.0.0.1:8000/source_image/art_0.png",
-    "audio_url":"http://127.0.0.1:8000/driven_audio/bus_chinese.wav"
-
+    "image_url":"http://127.0.0.1:5000/source_image/art_0.png",
+    "audio_url":"http://127.0.0.1:5000/driven_audio/bus_chinese.wav",
+    "preprocess":"full",
+    "still":"1",
+    "enhancer":"gfpgan",
+    "ref_eyeblink":"http://127.0.0.1:5000/ref_video/WDA_KatieHill_000.mp4"
   },
   "launch": {
-
+      "device_index": 0
   }
 }
 

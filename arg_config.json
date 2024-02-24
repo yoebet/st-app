@@ -9,27 +9,23 @@
     "sys_name": "driven_audio",
     "required": true,
     "need_change_url": true,
-    "default_ext": "m4a",
-    "default_file_name": "input-audio"
+    "default_ext": "wav"
   },
   "image_url": {
     "sys_name": "source_image",
     "required": true,
     "need_change_url": true,
-    "default_ext": "jpg",
-    "default_file_name": "input-image"
+    "default_ext": "jpg"
   },
   "ref_eyeblink": {
     "default": null,
     "need_change_url": true,
-    "default_ext": "mp4",
-    "default_file_name": "ref-eyeblink-video"
+    "default_ext": "mp4"
   },
   "ref_pose": {
     "default": null,
     "need_change_url": true,
-    "default_ext": "mp4",
-    "default_file_name": "ref-pose-video"
+    "default_ext": "mp4"
   },
   "checkpoint_dir": "./checkpoints",
   "result_dir": "./results",
